@@ -137,7 +137,7 @@
                 document.body.addEventListener('wheel', _preventScroll, { passive: false });
                 document.body.addEventListener('touchmove',_preventScroll,false);
                 document.body.addEventListener('touchend',_preventScroll,false);
-                document.body.addEventListener('touchstart',_preventScroll,false);
+                document.body.addEventListener('touchstart',getTouchDelta,false);
    
                 document.body.addEventListener('keydown', checkKeyboard);
             }
@@ -165,7 +165,10 @@
                 _preventScroll(e)
             }
         }
-
+     function getTouchDelta(e) {
+            lastTouch = e.changedTouches[0].clientY;
+        }
+    
     function _preventScroll(e) {
         let lastDelta = 0;
         para = document.querySelector("#pos");
@@ -175,10 +178,10 @@
         } else {
                    
                     const touch = e.changedTouches && e.changedTouches[0].clientY;
-                     
+                    
                     lastDelta = lastTouch > touch ? 1 : -1;
-                    lastTouch = touch ;
-                    para.innerHtml = lastTouch.toString();
+                    
+                    para.innerHtml = "-last-" lastTouch;
          }
 
       
