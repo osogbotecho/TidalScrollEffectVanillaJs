@@ -87,9 +87,7 @@
             flex-grow: 1;
             pointer-events: none;
         }
-        #content-2{
-              background-color: black;
-        }   
+        
     </style>
 </head>
 
@@ -100,7 +98,8 @@
     let decreasingColor = "rgba(190, 40, 40, ratio)";
     let boxElement;
     let currentScrollY =0;
-    let lastTouch =0 ;
+    let lastTouch =0;
+   
     window.addEventListener("load", (event) => {
         boxElement = document.querySelector('#features-wrapper');
 
@@ -169,21 +168,24 @@
 
     function _preventScroll(e) {
         let lastDelta = 0;
-        
+        para = document.querySelector("#pos");
+   
         if (e instanceof WheelEvent) {
                 lastDelta = e.deltaY;
         } else {
                    
                     const touch = e.changedTouches && e.changedTouches[0].clientY;
-                   
+                     
                     lastDelta = lastTouch > touch ? 1 : -1;
-                      alert(lastDelta)
+                    lastTouch = touch ;
+                    para.innerHtml = lastTouch
          }
 
       
         console.log(scrollCounter,"counter");    
         console.log("lasDelta", lastDelta);
         const scrollDir = Math.sign(lastDelta);
+        
         content1 = document.querySelector("#content-1");
         content2 = document.querySelector("#content-2");
         content3 = document.querySelector("#content-3");
@@ -461,6 +463,8 @@
                     <h3 class="heading"> 50 millon +</h3>
                     <p class="text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
                         Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                    
+                    <p id="pos"> </p>
                 </div>
 
                 <div id="content-3" data-id="1" class="content-trigger">
