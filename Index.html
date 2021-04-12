@@ -170,7 +170,7 @@
         } else {
                     const touch = e.changedTouches && e.changedTouches[0].clientY;
                      lastDelta > touch ? 1 : -1;
-                     alert("na touch")
+                   
          }
 
       
@@ -262,7 +262,7 @@
                 document.body.removeEventListener('touchend',_preventScroll, { passive: false });
                 document.body.removeEventListener('keydown', checkKeyboard);
                 document.body.removeEventListener('touchstart',_preventScroll,false);
-                
+
                 console.log("scroll out bottom");   
                 scrollCounter =7
             }
