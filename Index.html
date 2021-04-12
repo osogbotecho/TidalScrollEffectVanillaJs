@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+    <style>
+        * {
+
+            margin: 0;
+        }
+
+        html {
+            /* body won't work ¯\_(ツ)_/¯ */
+            scroll-snap-type: y proximity;
+        }
+
+        body {
+            font-family: 'Poppins';
+            scroll-snap-type: y proximity
+        }
+
+        .flex {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .wrapper {
+            height: 100vh;
+            background-color: black;
+            /* display: flex;
+                flex-direction: column; */
+            margin: 0 !important;
+            padding: 0;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            /* width: 100%; */
+
+        }
+
+        .wrappergray {
+            height: 100vh;
+            background-color: gray;
+            /* display: flex;
+                flex-direction: column; */
+            margin: 0 !important;
+            padding: 0;
+            scroll-snap-align: start,end;
+            /* width: 100%; */
+
+
+        }
+
+        .container {
+
+            margin-left: 64px;
+            margin-right: 64px;
+        }
+
+        .heading {
+            font-weight: 900;
+            font-size: 1.25rem;
+            color: white
+        }
+
+        .text-muted {
+            font-size: 16px;
+            color: gray;
+        }
+
+        .my {
+            padding-top: 30px;
+            padding-bottom: 30px
+        }
+
+        .content-triggers[data-v-514665c4] {
+            margin-top: calc(-100vh + 6rem);
+        }
+
+        .content-trigger {
+            flex-grow: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<script>
+    let prevRatio = 0.0;
+    let scrollCounter = 0;
+    let increasingColor = "rgba(40, 40, 190, ratio)";
+    let decreasingColor = "rgba(190, 40, 40, ratio)";
+    let boxElement;
+    let currentScrollY =0;
+    window.addEventListener("load", (event) => {
+        boxElement = document.querySelector('#features-wrapper');
+
+
+        createObserver();
+    }, false);
+
+    function createObserver() {
+        let observer;
+
+        let options = {
+            root: null,
+            rootMargin: "0px",
+            threshold: buildThresholdList()
+        };
+
+        observer = new IntersectionObserver(handleIntersect, options);
+        observer.observe(boxElement);
+    }
+
+    function handleIntersect(entries, observer) {
+        //  disable scroll
+        entries.forEach((entry) => {
+           
+            if (entry.intersectionRatio > prevRatio) {
+                entry.target.style.backgroundColor = increasingColor.replace("ratio", entry.intersectionRatio);
+            } else {
+                entry.target.style.backgroundColor = decreasingColor.replace("ratio", entry.intersectionRatio);
+            }
+
+            if (entry.intersectionRatio == 1) {
+                console.log("lock shop");
+               
+                window.addEventListener('scroll', _preventScroll, { passive: false });
+                document.body.addEventListener('wheel', _preventScroll, { passive: false });
+                document.body.addEventListener('touchmove',_preventScroll, { passive: false });
+                document.body.addEventListener('touchend',_preventScroll, { passive: false });
+                window.removeEventListener('keydown', checkKeyboard);
+            }
+            
+            prevRatio = entry.intersectionRatio;
+        });
+    }
+
+    function buildThresholdList() {
+        let thresholds = [];
+        let numSteps = 100;
+
+        for (let i = 1.0; i <= numSteps; i++) {
+            let ratio = i / numSteps;
+            thresholds.push(ratio);
+        }
+
+        thresholds.push(0);
+        return thresholds;
+    }
+
+    function checkKeyboard(e) {
+            if (['ArrowUp', 'ArrowDown', 'Space', 'Home', 'End', 'PageUp', 'PageDown'].includes(e.code)) {
+                
+                _preventScroll(e)
+            }
+        }
+
+    function _preventScroll(e) {
+        let lastDelta = 0;
+        if (e instanceof WheelEvent) {
+                lastDelta = e.deltaY;
+        } else {
+                    const touch = e.changedTouches && e.changedTouches[0].clientY;
+                     lastDelta > touch ? 1 : -1;
+         }
+
+      
+        console.log(scrollCounter,"counter");    
+        console.log("lasDelta", lastDelta);
+        const scrollDir = Math.sign(lastDelta);
+        content1 = document.querySelector("#content-1");
+        content2 = document.querySelector("#content-2");
+        content3 = document.querySelector("#content-3");
+         e.preventDefault();
+       
+        if (scrollCounter != -2 && scrollCounter != 8) {
+            // prevent scroll
+        
+
+            
+            // scroll down
+            if (scrollDir == 1) {
+                    scrollCounter += 1;
+            }
+            // scroll up
+            if (scrollDir == -1) {
+                    scrollCounter -= 1;
+            }
+
+                
+                if (scrollCounter % 2 == 0) {
+
+                    let pos = scrollCounter / 2
+
+                    switch (pos) {
+                        case 1:
+                            //   content1= document.querySelector(`#content-${pos}`);
+                            content2.style.backgroundColor = "transparent"
+
+                            content3.style.backgroundColor = "transparent"
+                            content1.style.backgroundColor = "red"
+
+                            break;
+                        case 2:
+                            // content2 = document.querySelector(`#content-${pos}`);
+                            content1.style.backgroundColor = "transparent";
+                            content3.style.backgroundColor = "transparent";
+                            content2.style.backgroundColor = "red"
+
+                            break;
+
+                        case 3:
+                            // content3 = document.querySelector(`#content-${pos}`);
+                            content2.style.backgroundColor = "transparent";
+                            content1.style.backgroundColor = "transparent";
+                            content3.style.backgroundColor = "red"
+
+                            break;
+
+
+
+                        default:
+                            break;
+                    }
+                }    
+            
+
+
+
+
+
+        }
+        else {
+            // disable scroll
+
+            if(scrollCounter == -2){
+                console.log("scroll out top");
+
+                window.removeEventListener('scroll', _preventScroll, { passive: false });
+                document.body.removeEventListener('wheel', _preventScroll, { passive: false });
+                document.body.removeEventListener('touchmove',_preventScroll, { passive: false });
+                document.body.removeEventListener('touchend',_preventScroll, { passive: false });
+                window.removeEventListener('keydown', checkKeyboard);
+
+                scrollCounter=0;
+            }
+            if(scrollCounter == 8){
+                
+                window.removeEventListener('scroll', _preventScroll, { passive: false });
+                document.body.removeEventListener('wheel', _preventScroll, { passive: false });
+                document.body.removeEventListener('touchmove',_preventScroll, { passive: false });
+                document.body.removeEventListener('touchend',_preventScroll, { passive: false });
+                window.removeEventListener('keydown', checkKeyboard);
+
+                console.log("scroll out bottom");   
+                scrollCounter =7
+            }
+             
+            content1.style.backgroundColor = "transparent";
+            content2.style.backgroundColor = "transparent";
+            content3.style.backgroundColor = "transparent"
+            
+        }
+
+      
+        
+
+    
+
+    }
+
+
+    
+   
+        
+
+    /** @param {Event} e */
+    function preventScroll(e) {
+
+
+        if (this.disableScrolling && e.cancelable !== false) {
+            e.preventDefault();
+        }
+
+        // @ts-ignore
+        const lastDelta = e.deltaY;
+        if (!lastDelta) {
+            return;
+        }
+
+        const newScroll = Math.abs(lastDelta);
+        const lastScroll = Math.abs(this.lastScroll);
+
+        const tolerance = 5;
+        const decay = 0.8;
+        const delay = 300;
+
+        if (!this.momentumDecay) {
+            this.momentumDecay = setInterval(() => {
+                const lastScroll = Math.abs(this.lastScroll);
+                const direction = Math.sign(this.lastScroll);
+                const newScroll = lastScroll * decay;
+                if (newScroll > 0.1) {
+                    this.lastScroll = newScroll * direction;
+                } else {
+                    this.lastScroll = 0;
+                    if (this.momentumDecay) {
+                        clearInterval(this.momentumDecay);
+                        this.momentumDecay = null;
+                    }
+                }
+            }, delay);
+        }
+
+        if (!this.momentumTimeout && !this.momentumChecked) {
+            this.momentumChecked = true;
+            this.momentumTimeout = setTimeout(() => {
+                this.momentumTimeout = null;
+            }, delay);
+        }
+
+        if (this.momentumTimeout) {
+            if (newScroll > lastScroll) {
+                this.lastScroll = lastDelta;
+            }
+        } else {
+            if (/*(lastDirection && direction !== lastDirection) ||*/ newScroll > (lastScroll * tolerance)) {
+                this.stopPreventScroll();
+                this.momentumChecked = false;
+            } else if (newScroll < lastScroll || newScroll <= 1) {
+                this.lastScroll = lastDelta;
+            }
+        }
+    }
+
+    function stopPreventScroll() {
+        this.scrollTimeout = false;
+    }
+
+
+
+    function disableScroll() {
+        if (!this.disableScrolling) {
+            this.disableScrolling = true;
+            document.body.addEventListener('wheel', this.preventScroll, { passive: false });
+            document.body.addEventListener('touchmove', this.preventScroll, { passive: false });
+            document.body.addEventListener('touchend', this.stopPreventScroll);
+        }
+
+        if (this.disableScrollEffect || this.keyboardScroll) {
+            return;
+        }
+
+        // Make sure inertia doesn't take us any further
+        const first = this.activeDevice === 0 && this.previousDevice < 1;
+        const last = this.activeDevice === this.items.length - 1 && this.previousDevice === this.items.length - 1;
+        if (first || last) {
+            const wrapper = document.getElementById('features-wrapper');
+            if (wrapper) {
+                const bound = wrapper.getBoundingClientRect();
+                const scrollPos = bound.top + window.scrollY + (last ? bound.height - document.documentElement.clientHeight : 0);
+                window.scrollTo(0, last ? Math.floor(scrollPos) : Math.ceil(scrollPos));
+            }
+        }
+    }
+
+    function enableScroll() {
+        if (this.disableScrolling) {
+            this.disableScrolling = false;
+            document.body.removeEventListener('wheel', this.preventScroll, false);
+            document.body.removeEventListener('touchmove', this.preventScroll, false);
+            document.body.removeEventListener('touchend', this.stopPreventScroll);
+        }
+    }
+
+
+    function scrollToFeature(i) {
+        if (this.activeDevice === i) {
+            return;
+        }
+
+        this.disableScrollEffect = true;
+        this.activeDevice = i;
+        const feat = document.getElementById('content-' + (i + 1));
+        if (feat) {
+            feat.style.backgroundColor = "red";
+            const bound = feat.getBoundingClientRect();
+            const scrollPos = bound.top + window.scrollY;
+            window.scrollTo(0, Math.ceil(scrollPos));
+        }
+        this.disableScrollEffect = false;
+    }
+
+
+
+</script>
+
+<body>
+
+    <div class="wrappergray">
+        <div class="container">
+
+            <div clas="flex" style="padding-top:2rem">
+                <div class="feature my">
+                    <h3 class="heading"> 70 millon +</h3>
+                    <p class="">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
+                        Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                </div>
+
+                <div class="feature my">
+                    <h3 class="heading"> 50 millon +</h3>
+                    <p class="">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
+                        Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                </div>
+
+                <div class="feature my">
+                    <h3 class="heading"> 60 millon +</h3>
+                    <p class="">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
+                        Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="wrapper" id="features-wrapper">
+        <div class="container">
+
+            <div class="flex" style="padding-top:2rem">
+                <div id="content-1" data-id="1" class="content-trigger">
+                    <h3 class="heading"> 70 millon +</h3>
+                    <p class="text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
+                        Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                </div>
+
+                <div id="content-2" data-id="1" class="content-trigger">
+                    <h3 class="heading"> 50 millon +</h3>
+                    <p class="text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
+                        Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                </div>
+
+                <div id="content-3" data-id="1" class="content-trigger">
+                    <h3 class="heading"> 60 millon +</h3>
+                    <p class="text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
+                        Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="wrappergray">
+        <div class="container">
+
+            <div clas="flex" style="padding-top:2rem">
+                <div class="feature my">
+                    <h3 class="heading"> 70 millon +</h3>
+                    <p class="">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
+                        Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                </div>
+
+                <div class="feature my">
+                    <h3 class="heading"> 50 millon +</h3>
+                    <p class="">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
+                        Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                </div>
+
+                <div class="feature my">
+                    <h3 class="heading"> 60 millon +</h3>
+                    <p class="">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
+                        Eos, quasi suscipit neque vero non dolorum corporis!</p>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
