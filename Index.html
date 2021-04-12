@@ -97,6 +97,7 @@
     let decreasingColor = "rgba(190, 40, 40, ratio)";
     let boxElement;
     let currentScrollY =0;
+    let lastTouch =0 ;
     window.addEventListener("load", (event) => {
         boxElement = document.querySelector('#features-wrapper');
 
@@ -165,12 +166,15 @@
 
     function _preventScroll(e) {
         let lastDelta = 0;
+        
         if (e instanceof WheelEvent) {
                 lastDelta = e.deltaY;
         } else {
+                   
                     const touch = e.changedTouches && e.changedTouches[0].clientY;
-                     lastDelta > touch ? 1 : -1;
-                    alert(touch);
+                   
+                    lastDelta = lastTouch > touch ? 1 : -1;
+                   
          }
 
       
@@ -250,7 +254,7 @@
                 document.body.removeEventListener('touchmove',_preventScroll, { passive: false });
                 document.body.removeEventListener('touchend',_preventScroll, { passive: false });
                 document.body.removeEventListener('keydown', checkKeyboard);
-                document.body.removeEventListener('touchstart',_preventScroll,false);
+                document.body.removeEventListener('touchstart',getTouchDelta,false);
 
                 scrollCounter=0;
             }
@@ -261,7 +265,7 @@
                 document.body.removeEventListener('touchmove',_preventScroll, { passive: false });
                 document.body.removeEventListener('touchend',_preventScroll, { passive: false });
                 document.body.removeEventListener('keydown', checkKeyboard);
-                document.body.removeEventListener('touchstart',_preventScroll,false);
+                document.body.removeEventListener('touchstart',getTouchDelta,false);
 
                 console.log("scroll out bottom");   
                 scrollCounter =7
@@ -283,7 +287,9 @@
 
     
    
-        
+    function getTouchDelta(e) {
+            this.lastTouch = e.changedTouches[0].clientY;
+        }
 
     /** @param {Event} e */
     function preventScroll(e) {
