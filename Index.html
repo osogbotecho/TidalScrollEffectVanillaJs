@@ -87,7 +87,6 @@
             flex-grow: 1;
             pointer-events: none;
         }
-        
     </style>
 </head>
 
@@ -98,8 +97,7 @@
     let decreasingColor = "rgba(190, 40, 40, ratio)";
     let boxElement;
     let currentScrollY =0;
-    let lastTouch =0;
-   
+    let lastTouch =0 ;
     window.addEventListener("load", (event) => {
         boxElement = document.querySelector('#features-wrapper');
 
@@ -165,30 +163,30 @@
                 _preventScroll(e)
             }
         }
-     function getTouchDelta(e) {
+    
+    function getTouchDelta(e) {
             lastTouch = e.changedTouches[0].clientY;
         }
-    
+
     function _preventScroll(e) {
         let lastDelta = 0;
-        para = document.querySelector("#pos");
-   
+        
         if (e instanceof WheelEvent) {
                 lastDelta = e.deltaY;
         } else {
                    
                     const touch = e.changedTouches && e.changedTouches[0].clientY;
-                    
+                   
                     lastDelta = lastTouch > touch ? 1 : -1;
-                    
-                    para.innerHtml = "-last-" lastTouch;
+
+                   
+                   
          }
 
       
         console.log(scrollCounter,"counter");    
         console.log("lasDelta", lastDelta);
         const scrollDir = Math.sign(lastDelta);
-        
         content1 = document.querySelector("#content-1");
         content2 = document.querySelector("#content-2");
         content3 = document.querySelector("#content-3");
@@ -295,126 +293,9 @@
 
     
    
-    function getTouchDelta(e) {
-            this.lastTouch = e.changedTouches[0].clientY;
-        }
+    
 
-    /** @param {Event} e */
-    function preventScroll(e) {
-
-
-        if (this.disableScrolling && e.cancelable !== false) {
-            e.preventDefault();
-        }
-
-        // @ts-ignore
-        const lastDelta = e.deltaY;
-        if (!lastDelta) {
-            return;
-        }
-
-        const newScroll = Math.abs(lastDelta);
-        const lastScroll = Math.abs(this.lastScroll);
-
-        const tolerance = 5;
-        const decay = 0.8;
-        const delay = 300;
-
-        if (!this.momentumDecay) {
-            this.momentumDecay = setInterval(() => {
-                const lastScroll = Math.abs(this.lastScroll);
-                const direction = Math.sign(this.lastScroll);
-                const newScroll = lastScroll * decay;
-                if (newScroll > 0.1) {
-                    this.lastScroll = newScroll * direction;
-                } else {
-                    this.lastScroll = 0;
-                    if (this.momentumDecay) {
-                        clearInterval(this.momentumDecay);
-                        this.momentumDecay = null;
-                    }
-                }
-            }, delay);
-        }
-
-        if (!this.momentumTimeout && !this.momentumChecked) {
-            this.momentumChecked = true;
-            this.momentumTimeout = setTimeout(() => {
-                this.momentumTimeout = null;
-            }, delay);
-        }
-
-        if (this.momentumTimeout) {
-            if (newScroll > lastScroll) {
-                this.lastScroll = lastDelta;
-            }
-        } else {
-            if (/*(lastDirection && direction !== lastDirection) ||*/ newScroll > (lastScroll * tolerance)) {
-                this.stopPreventScroll();
-                this.momentumChecked = false;
-            } else if (newScroll < lastScroll || newScroll <= 1) {
-                this.lastScroll = lastDelta;
-            }
-        }
-    }
-
-    function stopPreventScroll() {
-        this.scrollTimeout = false;
-    }
-
-
-
-    function disableScroll() {
-        if (!this.disableScrolling) {
-            this.disableScrolling = true;
-            document.body.addEventListener('wheel', this.preventScroll, { passive: false });
-            document.body.addEventListener('touchmove', this.preventScroll, { passive: false });
-            document.body.addEventListener('touchend', this.stopPreventScroll);
-        }
-
-        if (this.disableScrollEffect || this.keyboardScroll) {
-            return;
-        }
-
-        // Make sure inertia doesn't take us any further
-        const first = this.activeDevice === 0 && this.previousDevice < 1;
-        const last = this.activeDevice === this.items.length - 1 && this.previousDevice === this.items.length - 1;
-        if (first || last) {
-            const wrapper = document.getElementById('features-wrapper');
-            if (wrapper) {
-                const bound = wrapper.getBoundingClientRect();
-                const scrollPos = bound.top + window.scrollY + (last ? bound.height - document.documentElement.clientHeight : 0);
-                window.scrollTo(0, last ? Math.floor(scrollPos) : Math.ceil(scrollPos));
-            }
-        }
-    }
-
-    function enableScroll() {
-        if (this.disableScrolling) {
-            this.disableScrolling = false;
-            document.body.removeEventListener('wheel', this.preventScroll, false);
-            document.body.removeEventListener('touchmove', this.preventScroll, false);
-            document.body.removeEventListener('touchend', this.stopPreventScroll);
-        }
-    }
-
-
-    function scrollToFeature(i) {
-        if (this.activeDevice === i) {
-            return;
-        }
-
-        this.disableScrollEffect = true;
-        this.activeDevice = i;
-        const feat = document.getElementById('content-' + (i + 1));
-        if (feat) {
-            feat.style.backgroundColor = "red";
-            const bound = feat.getBoundingClientRect();
-            const scrollPos = bound.top + window.scrollY;
-            window.scrollTo(0, Math.ceil(scrollPos));
-        }
-        this.disableScrollEffect = false;
-    }
+    
 
 
 
@@ -466,8 +347,6 @@
                     <h3 class="heading"> 50 millon +</h3>
                     <p class="text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Adipisci, dolor.
                         Eos, quasi suscipit neque vero non dolorum corporis!</p>
-                    
-                    <p id="pos"> </p>
                 </div>
 
                 <div id="content-3" data-id="1" class="content-trigger">
