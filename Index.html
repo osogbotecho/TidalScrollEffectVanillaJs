@@ -132,9 +132,11 @@
                
                 window.addEventListener('scroll', _preventScroll, { passive: false });
                 document.body.addEventListener('wheel', _preventScroll, { passive: false });
-                document.body.addEventListener('touchmove',_preventScroll, { passive: false });
-                document.body.addEventListener('touchend',_preventScroll, { passive: false });
-                window.removeEventListener('keydown', checkKeyboard);
+                document.body.addEventListener('touchmove',_preventScroll,false);
+                document.body.addEventListener('touchend',_preventScroll,false);
+                document.body.addEventListener('touchstart',_preventScroll,false);
+   
+                document.body.addEventListener('keydown', checkKeyboard);
             }
             
             prevRatio = entry.intersectionRatio;
@@ -168,6 +170,7 @@
         } else {
                     const touch = e.changedTouches && e.changedTouches[0].clientY;
                      lastDelta > touch ? 1 : -1;
+                     alert("na touch")
          }
 
       
@@ -242,22 +245,24 @@
             if(scrollCounter == -2){
                 console.log("scroll out top");
 
-                window.removeEventListener('scroll', _preventScroll, { passive: false });
+                document.body.removeEventListener('scroll', _preventScroll, { passive: false });
                 document.body.removeEventListener('wheel', _preventScroll, { passive: false });
                 document.body.removeEventListener('touchmove',_preventScroll, { passive: false });
                 document.body.removeEventListener('touchend',_preventScroll, { passive: false });
-                window.removeEventListener('keydown', checkKeyboard);
+                document.body.removeEventListener('keydown', checkKeyboard);
+                document.body.removeEventListener('touchstart',_preventScroll,false);
 
                 scrollCounter=0;
             }
             if(scrollCounter == 8){
                 
-                window.removeEventListener('scroll', _preventScroll, { passive: false });
+                document.body.removeEventListener('scroll', _preventScroll, { passive: false });
                 document.body.removeEventListener('wheel', _preventScroll, { passive: false });
                 document.body.removeEventListener('touchmove',_preventScroll, { passive: false });
                 document.body.removeEventListener('touchend',_preventScroll, { passive: false });
-                window.removeEventListener('keydown', checkKeyboard);
-
+                document.body.removeEventListener('keydown', checkKeyboard);
+                document.body.removeEventListener('touchstart',_preventScroll,false);
+                
                 console.log("scroll out bottom");   
                 scrollCounter =7
             }
